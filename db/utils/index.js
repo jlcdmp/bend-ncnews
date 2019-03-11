@@ -18,9 +18,17 @@ exports.titleArticleID = (data) => {
 };
 
 exports.formatComment = (data, ref) => {
-  //const format = [];
+  const format = [];
   data.forEach((element) => {
-    console.log(element);
+    const temp = { ...element };
+    temp.article_id = ref[element.belongs_to];
+    //delete temp.article_id;
+    temp.author = element.created_by;
+    //delete temp.author;
+    const formatTime = new Date(element.created_at);
+    temp.created_at = formatTime.toLocaleString();
+    format.push(temp);
+
   });
   return format;
 };
