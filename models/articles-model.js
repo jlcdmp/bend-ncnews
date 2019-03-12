@@ -23,4 +23,12 @@ exports.fetchArticleData = (query) => {
 
 exports.addArticle = article => connection('articles')
   .insert(article)
-  .returning('articles.title', 'articles.topic', 'articles.body', 'articles.author');
+  .returning('*');
+
+
+exports.fetchArticleDataByID = article_id => connection('articles')
+  .where('article_id', '=', article_id)
+  .returning('*');
+
+
+exports.patchArticle = article_id => connection;

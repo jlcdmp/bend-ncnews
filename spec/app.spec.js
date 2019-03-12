@@ -61,7 +61,19 @@ describe('/api', () => {
       })
       .expect(201)
       .then((res) => {
-        console.log(res.body);
+        expect(res.body[0]).to.have.any.keys('title', 'body', 'topic', 'author');
       }));
+    it('GET:200. Retuns a single article object consisting of author,title,article_id,body,topic,created_at & votes', () => request.get('/api/articles/1').expect(200)
+      .then((res) => {
+        expect(res.body[0]).to.have.keys('author', 'title', 'article_id', 'body', 'topic', 'created_at', 'votes');
+      }));
+    it('PATCH:204. Alters the article votes and retuns the patched article', () => {
+      request.patch('/api/articles/1')
+        .send({ inc_votes: 666 })
+        .expect(204)
+        .then((res) => {
+          console.log(res.body);
+        });
+    });
   });
 });

@@ -1,4 +1,6 @@
-const { fetchArticleData, addArticle } = require('../models/articles-model');
+const {
+  fetchArticleData, addArticle, fetchArticleDataByID, patchArticle,
+} = require('../models/articles-model');
 
 console.log('articles controller');
 
@@ -12,10 +14,24 @@ exports.getArticles = (req, res, next) => {
 
 exports.newArticle = (req, res, next) => {
   const article = req.body;
-  console.log(article);
   addArticle(article).then((newArticle) => {
-    console.log(newArticle);
     res.status(201).send(newArticle);
+  })
+    .catch(err => console.log(err));
+};
+
+exports.getArticleFromID = (req, res, next) => {
+  const { article_id } = req.params;
+  fetchArticleDataByID(article_id).then((article) => {
+    res.status(200).send(article);
+  })
+    .catch(err => console.log(err));
+};
+
+exports.patchArticleVote = (req, res, next) => {
+  const { article_id } = req.params;
+  patchArticle(article_id).then((patched) => {
+    res.status(204).send(patched);
   })
     .catch(err => console.log(err));
 };
