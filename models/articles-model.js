@@ -31,4 +31,17 @@ exports.fetchArticleDataByID = article_id => connection('articles')
   .returning('*');
 
 
-exports.patchArticle = article_id => connection;
+exports.patchArticle = (article_id, newVote) => connection('articles')
+  .update(newVote)
+  .where('article_id', '=', article_id)
+  .returning('*');
+
+exports.deleteArticle = article_id => connection('articles')
+  .where('article_id', '=', article_id)
+  .del();
+
+exports.fetchComments = article_id => connection('articles')
+  // .select('*')
+  // .from('articles')
+  .where('article_id', '=', article_id)
+  .join('comments', 'comments.comment_id', '=', 'comments.articles.article_id');

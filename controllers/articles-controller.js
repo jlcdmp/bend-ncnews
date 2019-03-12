@@ -1,5 +1,10 @@
 const {
-  fetchArticleData, addArticle, fetchArticleDataByID, patchArticle,
+  fetchArticleData,
+  addArticle,
+  fetchArticleDataByID,
+  patchArticle,
+  deleteArticle,
+  fetchComments,
 } = require('../models/articles-model');
 
 console.log('articles controller');
@@ -30,8 +35,25 @@ exports.getArticleFromID = (req, res, next) => {
 
 exports.patchArticleVote = (req, res, next) => {
   const { article_id } = req.params;
-  patchArticle(article_id).then((patched) => {
-    res.status(204).send(patched);
+  const newVote = req.body;
+  patchArticle(article_id, newVote).then((patched) => {
+    res.status(202).send(patched);
+  })
+    .catch(err => console.log(err));
+};
+
+exports.removeArticle = (req, res, next) => {
+  const { article_id } = req.params;
+  deleteArticle(article_id).then((removed) => {
+    res.sendStatus(204);
+  })
+    .catch(err => console.log(err));
+};
+
+exports.getCommentsByID = (req, res, next) => {
+  const { article_id } = req.params;
+  fetchComments(article_id).then((comments) => {
+    res.status(200).send(comments);
   })
     .catch(err => console.log(err));
 };

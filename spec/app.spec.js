@@ -19,7 +19,7 @@ describe('/api', () => {
         expect(res.body).to.be.an('array');
         expect(res.body[0]).to.have.keys('slug', 'description');
       }));
-    it('POST:201. Adds a new topic object consisting of slug & description', () => request.post('/api/topics')
+    it('POST:201. Uses topic_id to add a new topic object consisting of slug & description', () => request.post('/api/topics')
       .send([{ slug: 'politics', description: 'old lady bets countries youths future on black...no red...no black...' }])
       .expect(201)
       .then((res) => {
@@ -46,13 +46,11 @@ describe('/api', () => {
       .then((res) => {
         expect(res.body[0].created_at).to.equal('1974-11-26T12:21:54.000Z');
       }));
-    it('QUERY: Sory by set to any valid column', () => {
-      request.get('/api/articles?sortby= votes').expect(200)
-        .then((res) => {
-          expect(res.body[0].votes).to.equal(0);
-        });
-    });
-    it('POST:201. Adds new article object consisting of title,body,topic & author', () => request.post('/api/articles')
+    it('QUERY: Sory by set to any valid column', () => request.get('/api/articles?sortby= votes').expect(200)
+      .then((res) => {
+        expect(res.body[0].votes).to.equal(0);
+      }));
+    it('POST:201. uses article_id to add a new article object consisting of title,body,topic & author', () => request.post('/api/articles')
       .send({
         title: 'test title',
         body: 'test body',
@@ -67,13 +65,23 @@ describe('/api', () => {
       .then((res) => {
         expect(res.body[0]).to.have.keys('author', 'title', 'article_id', 'body', 'topic', 'created_at', 'votes');
       }));
-    it('PATCH:204. Alters the article votes and retuns the patched article', () => {
-      request.patch('/api/articles/1')
-        .send({ inc_votes: 666 })
-        .expect(204)
-        .then((res) => {
-          console.log(res.body);
-        });
-    });
+    it('PATCH:202. Uses article_id to alter the article votes,retuns the newly patched article', () => request.patch('/api/articles/1')
+      .send({ votes: 5 })
+      .expect(202)
+      .then((res) => {
+        expect(res.body[0].votes).to.equal(5);
+      }));
+    it('DELETE:204. Uses article_id to remove a single article from the database', () => request.delete('/api/articles/1')
+      .expect(204)
+      .then((res) => {
+        expect(res.body).to.eql({});
+        expect(res.status).to.equal(204);
+      }));
+    it('GET:200. Uses article_id to return an array of comments consisting of comment_id,votes, created_at,author & body', () => request.get('/api/articles/1/comments')
+      .expect(200)
+      .then((res) => {
+        expect(res.body).to.be.an('array');
+        expect(res.body[0]).to.have.keys('comment_id', 'votes', 'created_at', 'author', 'body');
+      }));
   });
 });

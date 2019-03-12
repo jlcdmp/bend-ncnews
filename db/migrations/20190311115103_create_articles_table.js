@@ -18,13 +18,15 @@ exports.up = function (knex, Promise) {
     articlesTable
       .foreign('topic')
       .references('slug')
-      .inTable('topics');
+      .inTable('topics')
+      .onDelete('CASCADE');
     articlesTable
       .string('author');
     articlesTable
       .foreign('author')
       .references('username')
-      .inTable('users');
+      .inTable('users')
+      .onDelete('CASCADE');
     articlesTable
       .timestamp('created_at')
       .defaultTo(knex.fn.now());

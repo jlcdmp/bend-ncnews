@@ -9,13 +9,15 @@ exports.up = function (knex, Promise) {
     commentsTable
       .foreign('author')
       .references('username')
-      .inTable('users');
+      .inTable('users')
+      .onDelete('CASCADE');
     commentsTable
       .integer('article_id');
     commentsTable
       .foreign('article_id')
       .references('article_id')
-      .inTable('articles');
+      .inTable('articles')
+      .onDelete('CASCADE');
     commentsTable
       .integer('votes')
       .defaultTo(0);
