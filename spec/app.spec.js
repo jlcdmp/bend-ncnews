@@ -30,7 +30,7 @@ describe('/api', () => {
     it('GET:200. Returns an array of objects consisting of author,title,article_id,topic,created_at,votes & body', () => request.get('/api/articles').expect(200)
       .then((res) => {
         expect(res.body.articles).to.be.an('array');
-        expect(res.body.articles[0]).to.have.keys('author', 'title', 'article_id', 'topic', 'created_at', 'votes', 'body');
+        expect(res.body.articles[0]).to.have.keys('author', 'title', 'article_id', 'topic', 'created_at', 'votes', 'body', 'comment_count');
       }));
     it('QUERY: Filter by authors', () => request.get('/api/articles?author=icellusedkars').expect(200)
       .then((res) => {

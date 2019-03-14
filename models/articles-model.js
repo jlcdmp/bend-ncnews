@@ -3,21 +3,23 @@ const connection = require('../db/connection');
 
 exports.fetchArticleData = (query) => {
   const knexQuery = connection
-    .select('*')
-    .from('articles');
+    .select('articles.article_id', 'articles.title', 'articles.body', 'articles.votes', 'articles.topic', 'articles.author', 'articles.created_at')
+    .from('articles')
+    .leftJoin('comments', 'articles.article_id', 'comments.article_id')
+    .groupBy('articles.article_id')
+    .count('comments.comment_id as comment_count');
 
-  // .count(comments)
 
   if (query.hasOwnProperty('author') === true) {
-    knexQuery.where('author', query.author);
+    knexQuery.where('articles.author', query.author);
   }
   if (query.hasOwnProperty('topic') === true) {
-    knexQuery.where('topic', query.topic);
+    knexQuery.where('articles.topic', query.topic);
   }
   if (query.sortby === 'created_at') {
-    knexQuery.orderBy('created_at', 'asc');
+    knexQuery.orderBy('articles.created_at', 'asc');
   } else if (query.sortby !== 'created_at') {
-    knexQuery.orderBy('votes', 'asc');
+    knexQuery.orderBy('articles.votes', 'asc');
   }
 
   return knexQuery;

@@ -6,6 +6,7 @@ const {
   deleteArticle,
   fetchComments,
   addComment,
+  commentCount,
 } = require('../models/articles-model');
 
 
@@ -14,7 +15,7 @@ exports.getArticles = (req, res, next) => {
   fetchArticleData(q).then((articles) => {
     res.send({ articles }).status(200);
   })
-    .catch(next);
+    .catch(err => console.log(err));
 };
 
 exports.newArticle = (req, res, next) => {
