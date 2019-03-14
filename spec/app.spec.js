@@ -63,8 +63,10 @@ describe('/api', () => {
       }));
     it('GET:200. Retuns a single article object consisting of author,title,article_id,body,topic,created_at & votes', () => request.get('/api/articles/1').expect(200)
       .then((res) => {
+        expect(res.body.article).to.be.an('array');
         expect(res.body.article[0]).to.have.keys('author', 'title', 'article_id', 'body', 'topic', 'created_at', 'votes');
       }));
+
     it('PATCH:202. Uses article_id to alter the article votes,returns the newly patched article', () => request.patch('/api/articles/1')
       .send({ votes: 5 })
       .expect(202)

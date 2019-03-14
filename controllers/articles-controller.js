@@ -9,13 +9,12 @@ const {
   commentCount,
 } = require('../models/articles-model');
 
-
 exports.getArticles = (req, res, next) => {
   const q = req.query;
   fetchArticleData(q).then((articles) => {
     res.send({ articles }).status(200);
   })
-    .catch(err => console.log(err));
+    .catch(next);
 };
 
 exports.newArticle = (req, res, next) => {
@@ -56,7 +55,6 @@ exports.getCommentsByID = (req, res, next) => {
   fetchComments(article_id)
     .then((comments) => {
       res.status(200).send({ comments });
-      //  console.log(comments);
     })
     .catch(next);
 };
@@ -68,5 +66,5 @@ exports.newComment = (req, res, next) => {
   addComment(article_id, comment).then((newComment) => {
     res.status(201).send({ newComment });
   })
-    .catch(err => console.log(err));
+    .catch(next);
 };
