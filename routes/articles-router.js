@@ -6,6 +6,7 @@ const {
   patchArticleVote,
   removeArticle,
   getCommentsByID,
+  newComment,
 } = require('../controllers/articles-controller');
 
 
@@ -15,5 +16,6 @@ articleRouter.get('/:article_id', getArticleFromID);
 articleRouter.patch('/:article_id', patchArticleVote);
 articleRouter.delete('/:article_id', removeArticle);
 articleRouter.get('/:article_id/comments', getCommentsByID);
+articleRouter.post('/:article_id/comments', newComment);
 
 module.exports = articleRouter;

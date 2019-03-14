@@ -81,6 +81,18 @@ describe('/api', () => {
       .expect(200)
       .then((res) => {
         expect(res.body.comments).to.be.an('array');
+        expect(res.body.comments[0]).to.have.any.keys('comment_id', 'votes', 'created_at', 'author', 'body');
+      }));
+    it('POST:201. Uses article_id to add a new comment object cosisting of comment_id, votes, created_at, author', () => request.post('/api/articles/1/comments')
+      .send({
+        author: 'icellusedkars',
+        article_id: 1,
+        votes: 0,
+        body: 'test',
+      })
+      .expect(201)
+      .then((res) => {
+        expect(res.body.newComment[0]).to.have.any.keys('comment_id, votes, created_at', 'author');
       }));
   });
   describe('/comments', () => {
@@ -118,6 +130,23 @@ describe('/api', () => {
       .expect(200)
       .then((res) => {
         expect(res.body).to.be.an('object');
+        expect(res.body.user[0]).to.have.keys('username', 'avatar_url', 'name');
+      }));
+  });
+  describe('/api', () => {
+    it('GET:200. Returns a JSON with all viable endpoints.', () => request.get('/api')
+      .expect(200)
+      .then((res) => {
+        expect(res.body.endpoints).to.be.an('object');
+        expect(res.body.endpoints).to.eql({
+          '/api/topics': 'Get all topics, post new topic',
+          '/api/articles': 'Get all articles, post new article',
+          'api/articles/:article_id': 'Get single article by ID, Patch single article by ID, delete single article by ID',
+          'api/users': 'Get all users, Post new user',
+          'api/users/:username': 'Get single user by username',
+          'api/users/:user_id': 'Get single user by ID',
+          'api/comments/:comment_id': 'Delete comment by ID, Patch comment by ID.',
+        });
       }));
   });
 });

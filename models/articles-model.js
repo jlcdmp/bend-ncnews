@@ -6,6 +6,8 @@ exports.fetchArticleData = (query) => {
     .select('*')
     .from('articles');
 
+  // .count(comments)
+
   if (query.hasOwnProperty('author') === true) {
     knexQuery.where('author', query.author);
   }
@@ -40,6 +42,11 @@ exports.deleteArticle = article_id => connection('articles')
   .where('article_id', '=', article_id)
   .del();
 
-exports.fetchComments = article_id => connection('articles')
+exports.fetchComments = article_id => connection('comments')
   .select('*')
   .where('article_id', '=', article_id);
+
+
+exports.addComment = (article_id, comment) => connection('comments')
+  .insert(comment)
+  .returning('*');

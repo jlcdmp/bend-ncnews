@@ -7,5 +7,5 @@ exports.postUser = user => connection('users')
   .returning('*');
 
 exports.fetchUserByID = username => connection('users')
-  .where('username', '=', username)
+  .where('username', username)
   .returning('*');

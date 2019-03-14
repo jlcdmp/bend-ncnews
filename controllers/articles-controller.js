@@ -5,6 +5,7 @@ const {
   patchArticle,
   deleteArticle,
   fetchComments,
+  addComment,
 } = require('../models/articles-model');
 
 
@@ -51,10 +52,20 @@ exports.removeArticle = (req, res, next) => {
 
 exports.getCommentsByID = (req, res, next) => {
   const { article_id } = req.params;
-
   fetchComments(article_id)
     .then((comments) => {
       res.status(200).send({ comments });
+      //  console.log(comments);
     })
     .catch(next);
+};
+
+exports.newComment = (req, res, next) => {
+  const { article_id } = req.query;
+  const comment = req.body;
+
+  addComment(article_id, comment).then((newComment) => {
+    res.status(201).send({ newComment });
+  })
+    .catch(err => console.log(err));
 };

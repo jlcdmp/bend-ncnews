@@ -1,0 +1,9 @@
+{
+  "/api/topics": "Get all topics, post new topic",
+  "/api/articles": "Get all articles, post new article",
+  "api/articles/:article_id": "Get single article by ID, Patch single article by ID, delete single article by ID",
+  "api/users": "Get all users, Post new user",
+  "api/users/:username": "Get single user by username",
+  "api/users/:user_id": "Get single user by ID",
+  "api/comments/:comment_id": "Delete comment by ID, Patch comment by ID."
+}
