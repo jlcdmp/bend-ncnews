@@ -8,7 +8,6 @@ const {
   getCommentsByID,
 } = require('../controllers/articles-controller');
 
-console.log('article router');
 
 articleRouter.get('/', getArticles);
 articleRouter.post('/', newArticle);

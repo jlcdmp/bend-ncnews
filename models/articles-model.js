@@ -1,6 +1,5 @@
 const connection = require('../db/connection');
 
-console.log('article model');
 
 exports.fetchArticleData = (query) => {
   const knexQuery = connection
@@ -41,7 +40,5 @@ exports.deleteArticle = article_id => connection('articles')
   .del();
 
 exports.fetchComments = article_id => connection('articles')
-  // .select('*')
-  // .from('articles')
-  .where('article_id', '=', article_id)
-  .join('comments', 'comments.comment_id', '=', 'comments.articles.article_id');
+  .select('*')
+  .where('article_id', '=', article_id);

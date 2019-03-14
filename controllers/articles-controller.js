@@ -7,7 +7,6 @@ const {
   fetchComments,
 } = require('../models/articles-model');
 
-console.log('articles controller');
 
 exports.getArticles = (req, res, next) => {
   const q = req.query;
@@ -52,8 +51,10 @@ exports.removeArticle = (req, res, next) => {
 
 exports.getCommentsByID = (req, res, next) => {
   const { article_id } = req.params;
-  fetchComments(article_id).then((comments) => {
-    res.status(200).send(comments);
-  })
+
+  fetchComments(article_id)
+    .then((comments) => {
+      res.status(200).send({ comments });
+    })
     .catch(err => console.log(err));
 };

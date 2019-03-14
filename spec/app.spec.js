@@ -65,7 +65,7 @@ describe('/api', () => {
       .then((res) => {
         expect(res.body[0]).to.have.keys('author', 'title', 'article_id', 'body', 'topic', 'created_at', 'votes');
       }));
-    it('PATCH:202. Uses article_id to alter the article votes,retuns the newly patched article', () => request.patch('/api/articles/1')
+    it('PATCH:202. Uses article_id to alter the article votes,returns the newly patched article', () => request.patch('/api/articles/1')
       .send({ votes: 5 })
       .expect(202)
       .then((res) => {
@@ -80,8 +80,46 @@ describe('/api', () => {
     it('GET:200. Uses article_id to return an array of comments consisting of comment_id,votes, created_at,author & body', () => request.get('/api/articles/1/comments')
       .expect(200)
       .then((res) => {
-        expect(res.body).to.be.an('array');
-        expect(res.body[0]).to.have.keys('comment_id', 'votes', 'created_at', 'author', 'body');
+        expect(res.body.comments).to.be.an('array');
       }));
+    describe('/comments', () => {
+      it('PATCH:202. Uses comment_id to alter the comment votes, returns the newly patched comment ', () => {
+        return request.patch('/api/comments/1')
+          .send({ votes: -999 })
+          .expect(202)
+          .then((res) => {
+            expect(res.body[0].votes).to.equal(-999);
+          });
+      });
+      it('DELETE:204. Uses comment_id to remove a single comment form the database', () => request.delete('/api/comments/1')
+        .expect(204)
+        .then((res) => {
+          expect(res.body).to.eql({});
+          expect(res.status).to.equal(204);
+        }));
+    });
+    describe('/users', () => {
+      it('GET:200. Returns an array of user objects consisting of username, avatar_url & name', () => request.get('/api/users')
+        .expect(200)
+        .then((res) => {
+          expect(res.body.users).to.be.an('array');
+        }));
+      it('POST:201. Adds new user object consisting of username avatar_url & name ', () => request.post('/api/users')
+        .send({
+          username: 'test',
+          avatar_url: 'test',
+          name: 'test',
+        })
+        .expect(201)
+        .then((res) => {
+          expect(res.body.newUser).to.be.an('array');
+          expect(res.body.newUser[0]).to.have.keys('username', 'avatar_url', 'name');
+        }));
+      it('GET:200. Uses username to get a single user object consisting of username, avatar_url, name', () => request.get('/api/users/butter_bridge')
+        .expect(200)
+        .then((res) => {
+          expect(res.body).to.be.an('object');
+        }));
+    });
   });
 });
