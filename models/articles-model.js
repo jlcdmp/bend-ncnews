@@ -17,6 +17,7 @@ exports.fetchArticleData = (query) => {
   } else if (query.sortby !== 'created_at') {
     knexQuery.orderBy('votes', 'asc');
   }
+
   return knexQuery;
 };
 

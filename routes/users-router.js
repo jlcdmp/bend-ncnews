@@ -9,6 +9,4 @@ usersRouter.post('/', addUser);
 usersRouter.get('/:username', getUserByID);
 
 
-console.log('userrouter');
-
 module.exports = usersRouter;

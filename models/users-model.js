@@ -1,7 +1,5 @@
 const connection = require('../db/connection');
 
-console.log('usermodel');
-
 exports.fetchUsers = () => connection.select('*').from('users');
 
 exports.postUser = user => connection('users')

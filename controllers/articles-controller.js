@@ -11,42 +11,42 @@ const {
 exports.getArticles = (req, res, next) => {
   const q = req.query;
   fetchArticleData(q).then((articles) => {
-    res.send(articles).status(200);
+    res.send({ articles }).status(200);
   })
-    .catch(err => console.log(err));
+    .catch(next);
 };
 
 exports.newArticle = (req, res, next) => {
   const article = req.body;
   addArticle(article).then((newArticle) => {
-    res.status(201).send(newArticle);
+    res.status(201).send({ newArticle });
   })
-    .catch(err => console.log(err));
+    .catch(next);
 };
 
 exports.getArticleFromID = (req, res, next) => {
   const { article_id } = req.params;
   fetchArticleDataByID(article_id).then((article) => {
-    res.status(200).send(article);
+    res.status(200).send({ article, article_id });
   })
-    .catch(err => console.log(err));
+    .catch(next);
 };
 
 exports.patchArticleVote = (req, res, next) => {
   const { article_id } = req.params;
   const newVote = req.body;
   patchArticle(article_id, newVote).then((patched) => {
-    res.status(202).send(patched);
+    res.status(202).send({ patched });
   })
-    .catch(err => console.log(err));
+    .catch(next);
 };
 
 exports.removeArticle = (req, res, next) => {
   const { article_id } = req.params;
-  deleteArticle(article_id).then((removed) => {
+  deleteArticle(article_id).then(() => {
     res.sendStatus(204);
   })
-    .catch(err => console.log(err));
+    .catch(next);
 };
 
 exports.getCommentsByID = (req, res, next) => {
@@ -56,5 +56,5 @@ exports.getCommentsByID = (req, res, next) => {
     .then((comments) => {
       res.status(200).send({ comments });
     })
-    .catch(err => console.log(err));
+    .catch(next);
 };

@@ -12,6 +12,4 @@ apiRouter.use('/users', usersRouter);
 
 apiRouter.use('/comments', commentsRouter);
 
-console.log('api router');
-
 module.exports = apiRouter;
