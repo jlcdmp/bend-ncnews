@@ -3,10 +3,15 @@ const { fetchTopicData, addTopic } = require('../models/topics-model');
 
 exports.getTopics = (req, res, next) => {
   fetchTopicData().then((topics) => {
-    res.send({ topics }).status(200);
+    console.log(topics.length);
+    if (topics.length === 0) next({ status: 404 });
+    else {
+      res.send({ topics }).status(200);
+    }
   })
-    .catch(next);
+    .catch(err => console.log(err));
 };
+
 
 exports.newTopic = (req, res, next) => {
   const topic = req.body;

@@ -1,7 +1,6 @@
 const connection = require('../db/connection');
 
 
-
 exports.fetchArticleData = (query) => {
   const knexQuery = connection
     .select('articles.article_id', 'articles.title', 'articles.body', 'articles.votes', 'articles.topic', 'articles.author', 'articles.created_at')

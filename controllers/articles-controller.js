@@ -6,13 +6,15 @@ const {
   deleteArticle,
   fetchComments,
   addComment,
-  commentCount,
 } = require('../models/articles-model');
 
 exports.getArticles = (req, res, next) => {
   const q = req.query;
   fetchArticleData(q).then((articles) => {
-    res.send({ articles }).status(200);
+    if (articles.length === 0) next({ status: 404 });
+    else {
+      res.send({ articles }).status(200);
+    }
   })
     .catch(next);
 };
@@ -28,7 +30,10 @@ exports.newArticle = (req, res, next) => {
 exports.getArticleFromID = (req, res, next) => {
   const { article_id } = req.params;
   fetchArticleDataByID(article_id).then((article) => {
-    res.status(200).send({ article, article_id });
+    if (article.length === 0) next({ status: 404 });
+    else {
+      res.status(200).send({ article, article_id });
+    }
   })
     .catch(next);
 };
@@ -37,14 +42,17 @@ exports.patchArticleVote = (req, res, next) => {
   const { article_id } = req.params;
   const newVote = req.body;
   patchArticle(article_id, newVote).then((patched) => {
-    res.status(202).send({ patched });
+    if (patched.length === 0) next({ status: 404 });
+    else {
+      res.status(202).send({ patched });
+    }
   })
     .catch(next);
 };
 
 exports.removeArticle = (req, res, next) => {
   const { article_id } = req.params;
-  deleteArticle(article_id).then(() => {
+  deleteArticle(article_id).then((removed) => {
     res.sendStatus(204);
   })
     .catch(next);
