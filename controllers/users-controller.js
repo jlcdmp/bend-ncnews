@@ -19,7 +19,10 @@ exports.addUser = (req, res, next) => {
 exports.getUserByID = (req, res, next) => {
   const { username } = req.params;
   fetchUserByID(username).then((user) => {
-    res.status(200).send({ user });
+    if (user.length === 0) res.status(404).send({ message: `The username ${username} does not exsist` });
+    else {
+      res.status(200).send({ user });
+    }
   })
     .catch(next);
 };

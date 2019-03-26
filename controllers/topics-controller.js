@@ -3,13 +3,12 @@ const { fetchTopicData, addTopic } = require('../models/topics-model');
 
 exports.getTopics = (req, res, next) => {
   fetchTopicData().then((topics) => {
-    console.log(topics.length);
     if (topics.length === 0) next({ status: 404 });
     else {
       res.send({ topics }).status(200);
     }
   })
-    .catch(err => console.log(err));
+    .catch(next);
 };
 
 

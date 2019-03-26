@@ -2,7 +2,7 @@ exports.formatTimeStamp = (data) => {
   const format = [];
   data.forEach((element) => {
     const formatTime = new Date(element.created_at);
-    element.created_at = formatTime.toLocaleString();
+    element.created_at = formatTime;
     format.push(element);
   });
   return format;

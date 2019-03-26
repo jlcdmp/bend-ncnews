@@ -17,6 +17,9 @@ exports.handle422s = (err, req, res, next) => {
 };
 
 exports.handle404s = (err, req, res, next) => {
-  res.status(404).send({ message: 'Page not found' });
-  next(err);
+  const codes = {
+    23503: 'Cannot post with an invlaid author/topic',
+  };
+  if (codes[err.code]) res.status(400).send({ message: codes[err.code] });
+  else next(err);
 };
