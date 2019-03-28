@@ -8,37 +8,31 @@ const {
   addComment,
 } = require('../models/articles-model');
 
-const { sortByCheck } = require('./tools');
+// if (q.author !== 'butter_bridge' && q.author !== 'rogersop' && q.author !== 'icellusedkars') {
+// res.status(400).send({ message: `Author ${q.author} does not exsist` });
 
 
 exports.getArticles = (req, res, next) => {
   const q = req.query;
-  if (q.sort_by) {
-    if (q.sort_by !== 'created_at' || q.sort_by !== 'votes' || q.sort_by !== 'article_id') {
-      res.status(400).send({ message: `Cannot sort_by ${q.sort_by}` });
-    }
-  } else if (q.author) {
-    if (q.author !== 'butter_bridge' && q.author !== 'rogersop' && q.author !== 'icellusedkars') {
-      res.status(400).send({ message: `Author ${q.author} does not exsist` });
-    } else {
-      fetchArticleData(q)
-        .then((articles) => {
-          if (articles.length === 0) next({ status: 404 });
-          else {
-            res
-              .send({ articles })
-              .status(200);
-          }
-        })
-        .catch(next);
-    }
+
+  const validSortBy = ['created_at', 'votes', 'article_id', undefined];
+  if (!validSortBy.includes(q.sort_by)) {
+    return res.status(400).send({ message: `Cannot sort_by ${q.sort_by}` });
   }
+  fetchArticleData(q)
+    .then((articles) => {
+      if (articles.length === 0) res.status(404).send({ message: 'Page not found' });
+      else {
+        res.send({ articles }).status(200);
+      }
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
 
 
 exports.newArticle = (req, res, next) => {
-  // promise.all CAN be used -> using for returning.
-  // invalid topic
   const article = req.body;
   addArticle(article)
     .then((newArticle) => {
@@ -48,7 +42,6 @@ exports.newArticle = (req, res, next) => {
     })
     .catch(next);
 };
-
 
 exports.getArticleFromID = (req, res, next) => {
   const { article_id } = req.params;

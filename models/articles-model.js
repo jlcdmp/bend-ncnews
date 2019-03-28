@@ -10,19 +10,16 @@ exports.fetchArticleData = (query) => {
     .count('comments.comment_id as comment_count')
     .orderBy('articles.created_at', 'asc');
 
-
-  if (query.hasOwnProperty('author') === true) {
+  if (query.author) {
     knexQuery.where('articles.author', query.author);
-  }
-  if (query.hasOwnProperty('topic') === true) {
+  } else if (query.topic) {
     knexQuery.where('articles.topic', query.topic);
   }
-  if (query.sortby === 'votes') {
+  if (query.sort_by === 'votes') {
     knexQuery.orderBy('articles.votes', 'asc');
-  } else if (query.sortby !== 'topic') {
+  } else if (query.sort_by === 'topic') {
     knexQuery.orderBy('articles.topic', 'asc');
   }
-
   return knexQuery;
 };
 

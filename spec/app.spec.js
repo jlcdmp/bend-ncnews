@@ -17,6 +17,7 @@ describe('/api', () => {
     it('GET:200. Retuns an array of topic object consisting of slug & description.', () => request.get('/api/topics').expect(200)
       .then((res) => {
         expect(res.body.topics).to.be.an('array');
+        expect(res.body.topics.length).to.equal(2);
         expect(res.body.topics[0]).to.have.keys('slug', 'description');
       }));
     it('POST:201. Uses topic_id to add a new topic object consisting of slug & description', () => request.post('/api/topics')
@@ -30,6 +31,7 @@ describe('/api', () => {
     it('GET:200. Returns an array of objects consisting of author,title,article_id,topic,created_at,votes & body', () => request.get('/api/articles').expect(200)
       .then((res) => {
         expect(res.body.articles).to.be.an('array');
+        expect(res.body.articles.length).to.equal(12);
         expect(res.body.articles[0]).to.have.keys('author', 'title', 'article_id', 'topic', 'created_at', 'votes', 'body', 'comment_count');
       }));
     it('QUERY: Filter by authors', () => request.get('/api/articles?author=icellusedkars').expect(200)
@@ -42,12 +44,12 @@ describe('/api', () => {
         expect(res.body.articles[0].topic).to.equal('mitch');
         expect(res.body.articles[1].topic).to.equal('mitch');
       }));
-    it('QUERY: Sort by defualt to date', () => request.get('/api/articles?sortby=created_at').expect(200)
+    it('QUERY: Sort by defualt to date', () => request.get('/api/articles?sort_by=created_at').expect(200)
       .then((res) => {
         expect(res.body.articles[0].article_id).to.equal(12);
         expect(res.body.articles[1].article_id).to.equal(11);
       }));
-    it('QUERY: Sory by set to any valid column', () => request.get('/api/articles?sortby= votes').expect(200)
+    it('QUERY: Sory by set to any valid column', () => request.get('/api/articles?sort_by=votes').expect(200)
       .then((res) => {
         expect(res.body.articles[0].votes).to.equal(0);
       }));
@@ -117,6 +119,7 @@ describe('/api', () => {
     it('GET:200. Returns an array of user objects consisting of username, avatar_url & name', () => request.get('/api/users')
       .expect(200)
       .then((res) => {
+        expect(res.body.users.length).to.equal(3);
         expect(res.body.users).to.be.an('array');
       }));
     it('POST:201. Adds new user object consisting of username avatar_url & name ', () => request.post('/api/users')
@@ -210,13 +213,15 @@ describe('/api', () => {
         .then((res) => {
           expect(res.body.message).to.equal('Cannot sort_by test');
         }));
-      it('QUERY:400 Returns appropriate error code and message when author is invalid', () => request.get('/api/articles?author=test')
+      it('QUERY:404 Returns appropriate error code and message when author is invalid', () => request.get('/api/articles?author=test')
+        .expect(404)
         .then((res) => {
-          expect(res.body.message).to.equal('Author test does not exsist');
+          expect(res.body.message).to.equal('Page not found');
         }));
-      it('QUERY:404. Returns appropriate error code and message when order by is invalid', () => request.get('/api/articles?order_by=test')
+      it('QUERY:400.If order by is set to an inalid collumn name, defualt back to created at', () => request.get('/api/articles?order_by=test')
+        .expect(200)
         .then((res) => {
-          expect(res.body.message).to.equal('Order by test is invalid must be asc or desc');
+          expect(res.body.articles[0].article_id).to.equal(12);
         }));
     });
     describe('/article_id', () => {
@@ -280,16 +285,14 @@ describe('/api', () => {
         .then((res) => {
           expect(res.body.message).to.equal('Cannot post with an invlaid author/topic');
         }));
-      it('POST:422. Returns appropriate error code and message when trying to post with missing feilds', () => {
-        request.post('/api/articles/1/comments')
-          .send({
-            body: 'test',
-          })
-          .expect(422)
-          .then((res) => {
-            expect(res.body.message).to.equal('Null value in collum viollates non - null contraint');
-          });
-      });
+      it('POST:422. Returns appropriate error code and message when trying to post with missing feilds', () => request.post('/api/articles/1/comments')
+        .send({
+          body: 'test',
+        })
+        .expect(422)
+        .then((res) => {
+          expect(res.body.message).to.equal('Null value in collum viollates non-null contraint');
+        }));
       describe('/:comments_id', () => {
         it('PATCH:404. Returns appropriate error code and message when patch has invalid body', () => request.patch('/api/comments/1')
           .send({ votes: 15, comment: 'test' })
