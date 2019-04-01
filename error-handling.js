@@ -23,3 +23,8 @@ exports.handle404s = (err, req, res, next) => {
   if (codes[err.code]) res.status(400).send({ message: codes[err.code] });
   else next(err);
 };
+
+
+exports.handle500s = (err, req, res, next) => {
+  res.status(500).json({ message: 'Internal Erorr' })
+}
