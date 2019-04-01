@@ -67,8 +67,7 @@ describe('/api', () => {
     describe('/:article_id', () => {
       it('GET:200. Returns a single article object consisting of author,title,article_id,body,topic,created_at & votes', () => request.get('/api/articles/1').expect(200)
         .then((res) => {
-          expect(res.body.article).to.be.an('array');
-          expect(res.body.article[0]).to.have.keys('author', 'title', 'article_id', 'body', 'topic', 'created_at', 'votes');
+          expect(res.body.article).to.have.keys('author', 'title', 'article_id', 'body', 'topic', 'created_at', 'votes');
         }));
       it('PATCH:202. Uses article_id to alter the article votes,returns the newly patched article', () => request.patch('/api/articles/1')
         .send({ votes: 5 })
@@ -143,18 +142,18 @@ describe('/api', () => {
     });
   });
   describe('/endpoints', () => {
-    it('GET:200. Returns a JSON with all viable endpoints.', () => request.get('/api/endpoints')
+    it('GET:200. Returns a JSON with all viable endpoints.', () => request.get('/api/api')
       .expect(200)
       .then((res) => {
         expect(res.body.endpoints).to.be.an('object');
         expect(res.body.endpoints).to.eql({
-          '/api/topics': 'Get all topics, post new topic',
-          '/api/articles': 'Get all articles, post new article',
-          'api/articles/:article_id': 'Get single article by ID, Patch single article by ID, delete single article by ID',
-          'api/users': 'Get all users, Post new user',
-          'api/users/:username': 'Get single user by username',
-          'api/users/:user_id': 'Get single user by ID',
-          'api/comments/:comment_id': 'Delete comment by ID, Patch comment by ID.',
+          '/topics': 'Get all topics, post new topic',
+          '/articles': 'Get all articles, post new article',
+          '/articles/:article_id': 'Get single article by ID, Patch single article by ID, delete single article by ID',
+          '/users': 'Get all users, Post new user',
+          '/users/:username': 'Get single user by username',
+          '/users/:user_id': 'Get single user by ID',
+          '/comments/:comment_id': 'Delete comment by ID, Patch comment by ID.',
         });
       }));
   });

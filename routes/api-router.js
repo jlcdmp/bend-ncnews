@@ -13,6 +13,6 @@ apiRouter.use('/users', usersRouter);
 
 apiRouter.use('/comments', commentsRouter);
 
-apiRouter.use('/', GetEndpoints);
+apiRouter.use('/api', GetEndpoints);
 
 module.exports = apiRouter;

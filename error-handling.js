@@ -26,5 +26,5 @@ exports.handle404s = (err, req, res, next) => {
 
 
 exports.handle500s = (err, req, res, next) => {
-  res.status(500).json({ message: 'Internal Erorr' })
-}
+  res.status(500).json({ message: 'Internal Erorr' });
+};

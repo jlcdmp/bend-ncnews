@@ -8,9 +8,6 @@ const {
   addComment,
 } = require('../models/articles-model');
 
-// if (q.author !== 'butter_bridge' && q.author !== 'rogersop' && q.author !== 'icellusedkars') {
-// res.status(400).send({ message: `Author ${q.author} does not exsist` });
-
 
 exports.getArticles = (req, res, next) => {
   const q = req.query;
@@ -45,10 +42,10 @@ exports.newArticle = (req, res, next) => {
 
 exports.getArticleFromID = (req, res, next) => {
   const { article_id } = req.params;
-  fetchArticleDataByID(article_id).then((article) => {
-    if (article.length === 0) res.status(404).send({ message: `The article_id ${article_id} does not exists` });
+  fetchArticleDataByID(article_id).then(([article]) => {
+    if (article === undefined) res.status(404).send({ message: `The article_id ${article_id} does not exists` });
     else {
-      res.status(200).send({ article, article_id });
+      res.status(200).send({ article });
     }
   })
     .catch(next);
