@@ -32,10 +32,11 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "chai": "^4.2.0",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
     "knex": "^0.15.2",
     "mocha": "^6.0.2",
-    "pg": "^7.8.2",
-    "express": "^4.16.4"
+    "pg": "^7.8.2"
   },
   "devDependencies": {
     "eslint": "^5.9.0",
