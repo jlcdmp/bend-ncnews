@@ -69,7 +69,7 @@ describe('/api', () => {
         .then((res) => {
           expect(res.body.article).to.have.keys('author', 'title', 'article_id', 'body', 'topic', 'created_at', 'votes');
         }));
-      it.only('PATCH:202. Uses article_id to alter the article votes,returns the newly patched article', () => request.patch('/api/articles/2')
+      it('PATCH:202. Uses article_id to alter the article votes,returns the newly patched article', () => request.patch('/api/articles/2')
         .send({ inc_votes: 1 })
         .expect(202)
         .then((res) => {
