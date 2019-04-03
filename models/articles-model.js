@@ -33,9 +33,9 @@ exports.fetchArticleDataByID = article_id => connection('articles')
   .returning('*');
 
 
-exports.patchArticle = (article_id, newVote) => connection('articles')
-  .update(newVote)
+exports.patchArticle = (article_id, inc_votes) => connection('articles')
   .where('article_id', '=', article_id)
+  .increment('votes', inc_votes)
   .returning('*');
 
 exports.deleteArticle = article_id => connection('articles')

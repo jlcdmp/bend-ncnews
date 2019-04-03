@@ -53,8 +53,9 @@ exports.getArticleFromID = (req, res, next) => {
 
 exports.patchArticleVote = (req, res, next) => {
   const { article_id } = req.params;
-  const newVote = req.body;
-  patchArticle(article_id, newVote).then(([article]) => {
+  const { inc_votes } = req.body;
+  patchArticle(article_id, inc_votes).then(([article]) => {
+    console.log(article);
     if (article === undefined) res.status(404).send({ message: `The article_id ${article_id} does not exists` });
     else {
       res.status(202).send({ article });

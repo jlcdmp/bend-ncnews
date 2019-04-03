@@ -69,11 +69,11 @@ describe('/api', () => {
         .then((res) => {
           expect(res.body.article).to.have.keys('author', 'title', 'article_id', 'body', 'topic', 'created_at', 'votes');
         }));
-      it('PATCH:202. Uses article_id to alter the article votes,returns the newly patched article', () => request.patch('/api/articles/1')
-        .send({ votes: 5 })
+      it.only('PATCH:202. Uses article_id to alter the article votes,returns the newly patched article', () => request.patch('/api/articles/2')
+        .send({ inc_votes: 1 })
         .expect(202)
         .then((res) => {
-          expect(res.body.article.votes).to.equal(5);
+          expect(res.body.article.votes).to.equal(1);
         }));
       it('DELETE:204. Uses article_id to remove a single article from the database', () => request.delete('/api/articles/1')
         .expect(204)
