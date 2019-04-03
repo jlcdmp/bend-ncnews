@@ -54,10 +54,10 @@ exports.getArticleFromID = (req, res, next) => {
 exports.patchArticleVote = (req, res, next) => {
   const { article_id } = req.params;
   const newVote = req.body;
-  patchArticle(article_id, newVote).then((patched) => {
-    if (patched.length === 0) res.status(404).send({ message: `The article_id ${article_id} does not exists` });
+  patchArticle(article_id, newVote).then(([article]) => {
+    if (article === undefined) res.status(404).send({ message: `The article_id ${article_id} does not exists` });
     else {
-      res.status(202).send({ patched });
+      res.status(202).send({ article });
     }
   })
     .catch(next);

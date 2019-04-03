@@ -73,7 +73,7 @@ describe('/api', () => {
         .send({ votes: 5 })
         .expect(202)
         .then((res) => {
-          expect(res.body.patched[0].votes).to.equal(5);
+          expect(res.body.article.votes).to.equal(5);
         }));
       it('DELETE:204. Uses article_id to remove a single article from the database', () => request.delete('/api/articles/1')
         .expect(204)
