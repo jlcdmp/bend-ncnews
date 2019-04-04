@@ -131,8 +131,7 @@ describe('/api', () => {
       })
       .expect(201)
       .then((res) => {
-        expect(res.body.newUser).to.be.an('array');
-        expect(res.body.newUser[0]).to.have.keys('username', 'avatar_url', 'name');
+        expect(res.body.newUser).to.have.keys('username', 'avatar_url', 'name');
       }));
     describe('/:user_id', () => {
       it('GET:200. Uses username to get a single user object consisting of username, avatar_url, name', () => request.get('/api/users/butter_bridge')

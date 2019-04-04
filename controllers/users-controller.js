@@ -10,7 +10,7 @@ exports.getUsers = (req, res, next) => {
 
 exports.addUser = (req, res, next) => {
   const user = req.body;
-  postUser(user).then((newUser) => {
+  postUser(user).then(([newUser]) => {
     res.status(201).send({ newUser });
   })
     .catch(next);
@@ -19,6 +19,7 @@ exports.addUser = (req, res, next) => {
 exports.getUserByID = (req, res, next) => {
   const { username } = req.params;
   fetchUserByID(username).then(([user]) => {
+    console.log(user);
     if (user === undefined) res.status(404).send({ message: `The username ${username} does not exsist` });
     else {
       res.status(200).send({ user });
