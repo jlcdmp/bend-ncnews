@@ -139,7 +139,7 @@ describe('/api', () => {
         .expect(200)
         .then((res) => {
           expect(res.body).to.be.an('object');
-          expect(res.body.user[0]).to.have.keys('username', 'avatar_url', 'name');
+          expect(res.body.user).to.have.keys('username', 'avatar_url', 'name');
         }));
     });
   });

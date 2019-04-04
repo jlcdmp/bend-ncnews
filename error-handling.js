@@ -2,7 +2,6 @@ exports.handle400s = (err, req, res, next) => {
   const codes = {
     '22P02': 'Invalid input syntax for integer',
     42703: 'Columns do not exsist',
-
   };
 
   if (codes[err.code]) res.status(400).send({ message: codes[err.code] });
