@@ -49,5 +49,6 @@ exports.fetchComments = article_id => connection('comments')
 
 
 exports.addComment = (article_id, comment) => connection('comments')
+  .where('article_id', '=', article_id)
   .insert(comment)
   .returning('*');

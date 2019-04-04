@@ -14,8 +14,6 @@ exports.removeCommentByID = (req, res, next) => {
 exports.patchCommentVotes = (req, res, next) => {
   const { comment_id } = req.params;
   const { inc_votes } = req.body;
-
-
   patchComment(comment_id, inc_votes).then(([comment]) => {
     if (comment === undefined) res.status(404).send({ message: `The comment_id ${comment_id} does not exsist` });
     else {

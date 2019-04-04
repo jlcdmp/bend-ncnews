@@ -91,12 +91,11 @@ describe('/api', () => {
         .send({
           author: 'icellusedkars',
           article_id: 1,
-          votes: 0,
           body: 'test',
         })
         .expect(201)
         .then((res) => {
-          expect(res.body.newComment).to.have.any.keys('comment_id, votes, created_at', 'author');
+          expect(res.body.newComment).to.have.any.keys('comment_id, created_at', 'author');
         }));
     });
   });
