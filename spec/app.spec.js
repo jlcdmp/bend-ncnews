@@ -69,12 +69,16 @@ describe('/api', () => {
         .then((res) => {
           expect(res.body.article).to.have.keys('author', 'title', 'article_id', 'body', 'topic', 'created_at', 'votes');
         }));
+
+
       it('PATCH:202. Uses article_id to alter the article votes,returns the newly patched article', () => request.patch('/api/articles/2')
         .send({ inc_votes: 1 })
         .expect(202)
         .then((res) => {
           expect(res.body.article.votes).to.equal(1);
         }));
+
+
       it('DELETE:204. Uses article_id to remove a single article from the database', () => request.delete('/api/articles/1')
         .expect(204)
         .then((res) => {
@@ -90,7 +94,6 @@ describe('/api', () => {
       it('POST:201. Uses article_id to add a new comment object cosisting of comment_id, votes, created_at, author', () => request.post('/api/articles/1/comments')
         .send({
           author: 'icellusedkars',
-          article_id: 1,
           body: 'test',
         })
         .expect(201)
@@ -101,7 +104,7 @@ describe('/api', () => {
   });
   describe('/comments/:comment_id', () => {
     it('PATCH:202. Uses comment_id to alter the comment votes, returns the newly patched comment ', () => request.patch('/api/comments/1')
-      .send({ votes: 1 })
+      .send({ inc_votes: 1 })
       .expect(202)
       .then((res) => {
         expect(res.body.comment.votes).to.equal(17);
@@ -284,20 +287,21 @@ describe('/api', () => {
         }));
       describe('/:comments_id', () => {
         it('PATCH:400. Returns appropriate error code and message when patch has invalid body', () => request.patch('/api/comments/1')
-          .send({ comment: 'test' })
+          .send({ test: 'test' })
           .expect(400)
           .then((res) => {
             expect(res.body.message).to.equal('Columns do not exsist');
           }));
+
         it('PATCH:400, returns appropriate error code and message when patch has invalid syntax for integer', () => request.patch('/api/comments/1')
-          .send({ votes: 'one' })
+          .send({ inc_votes: 'one' })
           .expect(400)
           .then((res) => {
             expect(res.body.message).to.equal('Invalid input syntax for integer');
           }));
       });
       it('PATCH:404. Returns appropriate error code and message when trying to patch to an invalid comment_id', () => request.patch('/api/comments/666')
-        .send({ votes: -100 })
+        .send({ inc_votes: -100 })
         .expect(404)
         .then((res) => {
           expect(res.body.message).to.equal('The comment_id 666 does not exsist');

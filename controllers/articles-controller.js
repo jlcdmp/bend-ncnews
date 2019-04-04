@@ -55,15 +55,19 @@ exports.patchArticleVote = (req, res, next) => {
   const { article_id } = req.params;
   const { inc_votes } = req.body;
 
+  if (typeof inc_votes === 'string') { next({ code: '22P02' }); }
 
-  patchArticle(article_id, inc_votes).then(([article]) => {
-    if (article === undefined) res.status(404).send({ message: `The article_id ${article_id} does not exists` });
-    else {
-      res.status(202).send({ article });
-    }
-  })
-    .catch(next);
+  if (typeof inc_votes === 'undefined') { next({ code: 42703 }); } else {
+    patchArticle(article_id, inc_votes).then(([article]) => {
+      if (article === undefined) res.status(404).send({ message: `The article_id ${article_id} does not exists` });
+      else {
+        res.status(202).send({ article });
+      }
+    })
+      .catch(next);
+  }
 };
+
 
 exports.removeArticle = (req, res, next) => {
   const { article_id } = req.params;
@@ -90,9 +94,13 @@ exports.getCommentsByID = (req, res, next) => {
 };
 
 exports.newComment = (req, res, next) => {
-  const { article_id } = req.query;
+  const { article_id } = req.params;
+
   const comment = req.body;
-  addComment(article_id, comment).then(([newComment]) => {
+
+  comment.article_id = article_id;
+
+  addComment(comment).then(([newComment]) => {
     res.status(201).send({ newComment });
   })
     .catch(next);
