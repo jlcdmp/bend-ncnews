@@ -56,7 +56,6 @@ exports.patchArticleVote = (req, res, next) => {
   const { inc_votes } = req.body;
 
   if (typeof inc_votes === 'string') { next({ code: '22P02' }); }
-
   if (typeof inc_votes === 'undefined') { next({ code: 42703 }); } else {
     patchArticle(article_id, inc_votes).then(([article]) => {
       if (article === undefined) res.status(404).send({ message: `The article_id ${article_id} does not exists` });
