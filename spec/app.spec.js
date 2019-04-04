@@ -137,6 +137,7 @@ describe('/api', () => {
       it('GET:200. Uses username to get a single user object consisting of username, avatar_url, name', () => request.get('/api/users/butter_bridge')
         .expect(200)
         .then((res) => {
+          console.log(res.body);
           expect(res.body).to.be.an('object');
           expect(res.body.user).to.have.keys('username', 'avatar_url', 'name');
         }));
