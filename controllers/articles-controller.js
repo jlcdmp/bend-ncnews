@@ -32,7 +32,7 @@ exports.getArticles = (req, res, next) => {
 exports.newArticle = (req, res, next) => {
   const article = req.body;
   addArticle(article)
-    .then((newArticle) => {
+    .then(([newArticle]) => {
       res
         .status(201)
         .send({ newArticle });
@@ -54,8 +54,9 @@ exports.getArticleFromID = (req, res, next) => {
 exports.patchArticleVote = (req, res, next) => {
   const { article_id } = req.params;
   const { inc_votes } = req.body;
+
+
   patchArticle(article_id, inc_votes).then(([article]) => {
-    console.log(article);
     if (article === undefined) res.status(404).send({ message: `The article_id ${article_id} does not exists` });
     else {
       res.status(202).send({ article });
@@ -91,7 +92,7 @@ exports.getCommentsByID = (req, res, next) => {
 exports.newComment = (req, res, next) => {
   const { article_id } = req.query;
   const comment = req.body;
-  addComment(article_id, comment).then((newComment) => {
+  addComment(article_id, comment).then(([newComment]) => {
     res.status(201).send({ newComment });
   })
     .catch(next);
