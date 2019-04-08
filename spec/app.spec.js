@@ -27,32 +27,68 @@ describe('/api', () => {
         expect(res.body.newTopic).to.eql([{ slug: 'test', description: 'test' }]);
       }));
   });
+
+
   describe('/articles', () => {
-    it('GET:200. Returns an array of objects consisting of author,title,article_id,topic,created_at,votes & body', () => request.get('/api/articles').expect(200)
+    it('GET:200. Returns an array of objects consisting of author,title,article_id,topic,created_at,votes & body', () => request.get('/api/articles')
+      .expect(200)
       .then((res) => {
         expect(res.body.articles).to.be.an('array');
         expect(res.body.articles.length).to.equal(12);
         expect(res.body.articles[0]).to.have.keys('author', 'title', 'article_id', 'topic', 'created_at', 'votes', 'body', 'comment_count');
       }));
+
+
     it('QUERY: Filter by authors', () => request.get('/api/articles?author=icellusedkars').expect(200)
       .then((res) => {
         expect(res.body.articles[0].author).to.equal('icellusedkars');
         expect(res.body.articles[1].author).to.equal('icellusedkars');
       }));
+
     it('QUERY: Filter by topics', () => request.get('/api/articles?topic=mitch').expect(200)
       .then((res) => {
         expect(res.body.articles[0].topic).to.equal('mitch');
         expect(res.body.articles[1].topic).to.equal('mitch');
       }));
+
     it('QUERY: Sort by defualt to date', () => request.get('/api/articles?sort_by=created_at').expect(200)
       .then((res) => {
         expect(res.body.articles[0].article_id).to.equal(12);
         expect(res.body.articles[1].article_id).to.equal(11);
       }));
-    it('QUERY: Sory by set to any valid column', () => request.get('/api/articles?sort_by=votes').expect(200)
+
+    it('QUERY: Sory by set to any valid column', () => request.get('/api/articles?sort_by=votes')
+      .expect(200)
       .then((res) => {
         expect(res.body.articles[0].votes).to.equal(0);
       }));
+
+    it('QUERY: Order by votes, asc', () => request.get('/api/articles?sort_by=votes&order=asc').expect(200)
+      .then((res) => {
+        expect(res.body.articles[0].votes).to.equal(0);
+      }));
+
+    it('QUERY: Order by votes set to desc', () => request.get('/api/articles?sort_by=votes&order=desc').expect(200)
+      .then((res) => {
+        expect(res.body.articles[0].votes).to.equal(100);
+      }));
+
+    it('QUERY: order by date set to asc', () => request.get('/api/articles?sort_by=created_at&order=asc').expect(200)
+      .then((res) => {
+        expect(res.body.articles[0].article_id).to.equal(12);
+      }));
+
+    it('QUERY: order by date set to desc', () => request.get('/api/articles?sort_by=created_at&order=desc')
+      .expect(200)
+      .then((res) => {
+        expect(res.body.articles[0].article_id).to.equal(1);
+      }));
+
+
+
+
+
+
     it('POST:201. uses article_id to add a new article object consisting of title,body,topic & author', () => request.post('/api/articles')
       .send({
         title: 'test title',
@@ -123,6 +159,8 @@ describe('/api', () => {
         expect(res.body.users.length).to.equal(3);
         expect(res.body.users).to.be.an('array');
       }));
+
+
     it('POST:201. Adds new user object consisting of username avatar_url & name ', () => request.post('/api/users')
       .send({
         username: 'test',
@@ -137,7 +175,6 @@ describe('/api', () => {
       it('GET:200. Uses username to get a single user object consisting of username, avatar_url, name', () => request.get('/api/users/butter_bridge')
         .expect(200)
         .then((res) => {
-          console.log(res.body);
           expect(res.body).to.be.an('object');
           expect(res.body.user).to.have.keys('username', 'avatar_url', 'name');
         }));

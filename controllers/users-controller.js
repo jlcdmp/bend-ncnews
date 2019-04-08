@@ -19,7 +19,6 @@ exports.addUser = (req, res, next) => {
 exports.getUserByID = (req, res, next) => {
   const { username } = req.params;
   fetchUserByID(username).then(([user]) => {
-    console.log(user);
     if (user === undefined) res.status(404).send({ message: `The username ${username} does not exsist` });
     else {
       res.status(200).send({ user });

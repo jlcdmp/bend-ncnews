@@ -11,11 +11,11 @@ const {
 
 exports.getArticles = (req, res, next) => {
   const q = req.query;
-
   const validSortBy = ['created_at', 'votes', 'article_id', undefined];
   if (!validSortBy.includes(q.sort_by)) {
     return res.status(400).send({ message: `Cannot sort_by ${q.sort_by}` });
   }
+
   fetchArticleData(q)
     .then((articles) => {
       if (articles.length === 0) res.status(404).send({ message: 'Page not found' });
@@ -23,9 +23,7 @@ exports.getArticles = (req, res, next) => {
         res.send({ articles }).status(200);
       }
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch(next);
 };
 
 
